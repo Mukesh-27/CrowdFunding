@@ -1,11 +1,14 @@
 import './App.css'
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import Navbar from './components/Navbar';
-import Footer from './components/Footer';
+import Navbar from './components/Landingpage/Navbar'
+import Footer from './components/Landingpage/Footer';
 import Home from './pages/Home';
-import AccountModal from './components/AccountModal';
-import LoginModal from './components/Login';
+import AccountModal from './components/Landingpage/AccountModal';
+import LoginModal from './components/Landingpage/Login';
+import Landing from './components/Creatorspage/Landing';
+import Resources from './components/Resource-Hub/Resources';
+import Createpro from './components/Resource-Hub/Createpro';
 
 const App = () => {
     return (
@@ -17,6 +20,9 @@ const App = () => {
                         <Route path="/" element={<Home />} />
                         <Route path="/signup" element={<AccountModal />} />
                         <Route path="/login" element={<LoginModal />} />
+                        <Route path="/creators" element={<Landing />} />
+                        <Route path="/resource-hub" element={<Resources />} />
+                        <Route path="/create-project" element={<Createpro />} />
                     </Routes>
                 </main>
                 <Footer />

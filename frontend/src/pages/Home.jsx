@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
-import Hero from '../components/Hero';
-import About from '../components/About'
-import TrustedSection from '../components/TrustedSection';
-import FeaturedProjects from '../components/FeaturedProjects';
-import ExploreCategories from '../components/Explorecateg';
-import CreatorCTA from '../components/CreatorCTA';
-import SuccessStories from '../components/SuccessStories';
-import BlogSection from '../components/BlogSection';
+import Hero from '../components/Landingpage/Hero';
+import About from '../components/Landingpage/About'
+import TrustedSection from '../components/Landingpage/TrustedSection';
+import FeaturedProjects from '../components/Landingpage/FeaturedProjects';
+import ExploreCategories from '../components/Landingpage/Explorecateg';
+import CreatorCTA from '../components/Landingpage/CreatorCTA';
+import SuccessStories from '../components/Landingpage/SuccessStories';
+import BlogSection from '../components/Landingpage/BlogSection';
 import Chat from './Chat';
 
 const Home = () => {

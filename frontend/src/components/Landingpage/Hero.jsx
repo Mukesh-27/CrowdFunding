@@ -1,8 +1,15 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const Hero = () => {
+    const navigate = useNavigate();
+
+    const handleLaunchProject = () => {
+        navigate('/creators');
+    };
+
     return (
-        <div className="pt-16 relative overflow-hidden">
+        <div id ="explore-hero"className="pt-16 relative overflow-hidden">
             <div className="absolute inset-0 bg-gradient-to-r from-blue-600/5 to-purple-600/5"></div>
             <div className="absolute inset-0">
                 <img 
@@ -28,7 +35,10 @@ const Hero = () => {
                             Our community of 2M+ backers is ready to support your next big project.
                         </p>
                         <div className="flex flex-col sm:flex-row gap-4 sm:gap-6">
-                            <button className="px-8 py-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-full hover:shadow-xl hover:shadow-blue-500/25 transition-all duration-300 transform hover:-translate-y-1 !rounded-button whitespace-nowrap text-lg font-semibold flex items-center justify-center">
+                            <button 
+                                onClick={handleLaunchProject}
+                                className="px-8 py-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-full hover:shadow-xl hover:shadow-blue-500/25 transition-all duration-300 transform hover:-translate-y-1 !rounded-button whitespace-nowrap text-lg font-semibold flex items-center justify-center"
+                            >
                                 <i className="fas fa-rocket mr-2"></i>
                                 Launch Your Project
                             </button>

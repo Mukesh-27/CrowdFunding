@@ -125,6 +125,9 @@ export default {
         zIndex: {
           50: '50',
         },
+        borderRadius: {
+          'button': '0.5rem', // 8px
+        }
       },
     },
     plugins: [],

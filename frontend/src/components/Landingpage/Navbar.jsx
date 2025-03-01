@@ -65,6 +65,7 @@ const Navbar = () => {
                 <div className="flex items-center space-x-8">
                     <Link 
                         to="/" 
+                        onClick={() => scrollToSection('explore-hero')}
                         className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-purple-600 transition-all duration-300 hover:scale-105"
                     >
                         FUNDIFY
