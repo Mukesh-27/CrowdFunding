@@ -14,11 +14,31 @@ import {
   faLightbulb
 } from '@fortawesome/free-solid-svg-icons';
 import Confetti from 'react-confetti';
+import Basics from './Basics';
+import Campaign from './campaign';
+import Funding from './Funding';
+import Payment from './Payment';
+import People from './People';
+import Plan from './Plan';
+import Projectimg from './Projectimg';
+import Rewards from './Rewards';
+import Story from './Story';
+import Projectreview from './Projectreview';
+import Promotion from './Promotion';
 
 const Createpro = () => {
   const [showConfetti, setShowConfetti] = useState(true);
   const [rulesAccepted, setRulesAccepted] = useState(false);
   const [activeSection, setActiveSection] = useState('basics');
+  
+  // State for checklist
+  const [checklist, setChecklist] = useState([
+    { id: 1, text: 'Have you defined your project goals?', completed: false },
+    { id: 2, text: 'Is your budget realistic and detailed?', completed: false },
+    { id: 3, text: 'Have you prepared your rewards for backers?', completed: false },
+    { id: 4, text: 'Is your project story compelling and clear?', completed: false },
+    { id: 5, text: 'Have you set a launch date?', completed: false },
+  ]);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -27,6 +47,16 @@ const Createpro = () => {
 
     return () => clearTimeout(timer);
   }, []);
+
+  const handleChecklistToggle = (id) => {
+    setChecklist((prev) =>
+      prev.map((item) =>
+        item.id === id ? { ...item, completed: !item.completed } : item
+      )
+    );
+  };
+
+  const completionPercentage = (checklist.filter(item => item.completed).length / checklist.length) * 100;
 
   const projectSteps = [
     {
@@ -109,6 +139,35 @@ const Createpro = () => {
     }
   ];
 
+  const renderSection = () => {
+    switch (activeSection) {
+      case 'basics':
+        return <Basics />;
+      case 'campaign':
+        return <Campaign />;
+      case 'funding':
+        return <Funding />;
+      case 'payment':
+        return <Payment />;
+      case 'people':
+        return <People />;
+      case 'plan':
+        return <Plan />;
+      case 'projectimg':
+        return <Projectimg />;
+      case 'rewards':
+        return <Rewards />;
+      case 'story':
+        return <Story />;
+      case 'review':
+        return <Projectreview />;
+      case 'promotion':
+        return <Promotion />;
+      default:
+        return <Basics />;
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-50">
       {showConfetti && <Confetti numberOfPieces={200} recycle={false} />}
@@ -164,7 +223,46 @@ const Createpro = () => {
         </div>
       )}
 
-      {/* Project Overview Section */}
+      {/* Project Readiness Checklist */}
+      {rulesAccepted && (
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-16">
+          <div className="bg-white rounded-2xl shadow-lg p-8">
+            <h2 className="text-3xl font-bold text-gray-900 mb-8 flex items-center">
+              <FontAwesomeIcon icon={faLightbulb} className="text-teal-500 mr-4" />
+              Project Readiness Checklist
+            </h2>
+            <div className="mb-4">
+              <p className="text-gray-600 mb-2">Completion: {completionPercentage.toFixed(0)}%</p>
+              <div className="relative w-full h-2 bg-gray-200 rounded">
+                <div
+                  className="absolute h-full bg-teal-500 rounded"
+                  style={{ width: `${completionPercentage}%` }}
+                />
+              </div>
+            </div>
+            <ul className="list-disc list-inside mb-4">
+              {checklist.map((item) => (
+                <li key={item.id} className="flex items-center mb-2">
+                  <input
+                    type="checkbox"
+                    checked={item.completed}
+                    onChange={() => handleChecklistToggle(item.id)}
+                    className="mr-2"
+                  />
+                  <span className={`transition duration-300 ${item.completed ? 'line-through text-gray-500' : ''}`}>
+                    {item.text}
+                  </span>
+                </li>
+              ))}
+            </ul>
+            <p className="text-gray-600 mb-4">
+              Make sure to review these points before launching your project!
+            </p>
+          </div>
+        </div>
+      )}
+
+      {/* Steps Navigation */}
       {rulesAccepted && (
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-16">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -194,59 +292,13 @@ const Createpro = () => {
             {/* Main Content Area */}
             <div className="lg:col-span-2">
               <div className="bg-white rounded-2xl shadow-lg p-8">
-                {/* Content for each section would go here */}
-                <div className="mb-8">
-                  <h2 className="text-3xl font-bold text-gray-900 mb-4">
-                    {projectSteps.find(step => step.id === activeSection)?.title}
-                  </h2>
-                  <p className="text-gray-600">
-                    {projectSteps.find(step => step.id === activeSection)?.description}
-                  </p>
-                </div>
-
-                {/* Placeholder for section-specific content */}
-                <div className="bg-gray-50 rounded-xl p-8 text-center">
-                  <FontAwesomeIcon icon={faLightbulb} className="text-4xl text-teal-500 mb-4" />
-                  <p className="text-gray-600">
-                    This section is under development. Content specific to {activeSection} will appear here.
-                  </p>
-                </div>
+                {/* Render the active section */}
+                {renderSection()}
               </div>
             </div>
           </div>
         </div>
       )}
-
-      {/* Footer / Support Section */}
-      <div className="bg-gray-50 py-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-            <div>
-              <h3 className="text-2xl font-bold text-gray-900 mb-6">Creator Resources</h3>
-              <ul className="space-y-4">
-                <li>
-                  <a href="#" className="text-teal-600 hover:text-teal-700">Campaign Best Practices</a>
-                </li>
-                <li>
-                  <a href="#" className="text-teal-600 hover:text-teal-700">Creator Handbook</a>
-                </li>
-                <li>
-                  <a href="#" className="text-teal-600 hover:text-teal-700">Marketing Guide</a>
-                </li>
-              </ul>
-            </div>
-            <div>
-              <h3 className="text-2xl font-bold text-gray-900 mb-6">Need Help?</h3>
-              <p className="text-gray-600 mb-4">
-                Our creator support team is here to help you succeed.
-              </p>
-              <button className="bg-gray-900 text-white px-6 py-3 rounded-lg hover:bg-gray-800 transition-all duration-300">
-                Contact Support
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
     </div>
   );
 };

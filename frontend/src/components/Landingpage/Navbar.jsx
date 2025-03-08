@@ -4,6 +4,7 @@ import { Link, useNavigate, useLocation } from 'react-router-dom';
 const navigationIcons = {
     explore: "fas fa-compass",
     startProject: "fas fa-rocket",
+    discover: "fas fa-binoculars",
     aboutUs: "fas fa-info-circle",
     blog: "fas fa-blog",
     search: "fas fa-search",
@@ -85,6 +86,13 @@ const Navbar = () => {
                             <i className={navigationIcons.startProject + " mr-2"}></i>
                             Start a Project
                         </button>
+                        <Link 
+                            to="/discover"
+                            className="text-gray-600 hover:text-blue-600 whitespace-nowrap !rounded-button transition-all duration-300 hover:scale-105 hover:shadow-md px-4 py-2"
+                        >
+                            <i className={navigationIcons.discover + " mr-2"}></i>
+                            Discover
+                        </Link>
                         <button 
                             onClick={() => scrollToSection('about-section')}
                             className="text-gray-600 hover:text-blue-600 whitespace-nowrap !rounded-button transition-all duration-300 hover:scale-105 hover:shadow-md px-4 py-2"
