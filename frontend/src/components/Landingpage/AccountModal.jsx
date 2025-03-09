@@ -6,6 +6,9 @@ import { faMapMarkerAlt, faGlobe, faRocket, faHandHoldingHeart, faCreditCard } f
 
 const AccountModal = () => {
     const [accountType, setAccountType] = useState('creator');
+    const [error, setError] = useState('');
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [submitSuccess, setSubmitSuccess] = useState(false);
     const [formData, setFormData] = useState({
         fullName: '',
         username: '',
@@ -82,21 +85,78 @@ const AccountModal = () => {
         }));
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        // Here you would typically send the data to your backend
-        console.log('Form submitted:', formData);
         
-        // Mock account creation date and stats
-        const mockData = {
-            ...formData,
-            accountCreated: new Date(),
-            lastLogin: new Date(),
-            createdProjects: 0,
-            backedProjects: 0
-        };
+        setIsSubmitting(true);
+        setError('');
         
-        console.log('Account created with:', mockData);
+        try {
+            if (accountType === 'creator') {
+                // Send creator data to backend
+                const response = await fetch('http://localhost:3000/creators/signup', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        fullName: formData.fullName,
+                        username: formData.username,
+                        email: formData.email,
+                        location: formData.location,
+                        bio: formData.bio,
+                        website: formData.website,
+                        password: formData.password,
+                        confirmPassword: formData.confirmPassword
+                    }),
+                });
+
+                const data = await response.json();
+                
+                if (!response.ok) {
+                    throw new Error(data.error || 'Failed to create account');
+                }
+                
+                console.log('Account created successfully:', data);
+                setSubmitSuccess(true);
+            } else {
+                // Send backer data to backend
+                const response = await fetch('http://localhost:3000/backors/signup', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        fullName: formData.fullName,
+                        username: formData.username,
+                        email: formData.email,
+                        location: formData.location,
+                        cardDetails: {
+                            cardNumber: formData.cardNumber,
+                            expiryDate: formData.expiryDate,
+                            cvv: formData.cvv
+                        },
+                        billingAddress: formData.billingAddress,
+                        interests: formData.preferredCategories,
+                        password: formData.password
+                    }),
+                });
+
+                const data = await response.json();
+                
+                if (!response.ok) {
+                    throw new Error(data.error || 'Failed to create account');
+                }
+                
+                console.log('Backer account created successfully:', data);
+                setSubmitSuccess(true);
+            }
+        } catch (err) {
+            console.error('Error creating account:', err);
+            setError(err.message);
+        } finally {
+            setIsSubmitting(false);
+        }
     };
 
     const categories = [
@@ -450,11 +510,22 @@ const AccountModal = () => {
                         transition={{ delay: 0.4 }}
                         className="pt-4"
                     >
+                        {error && (
+                            <div className="mb-4 bg-red-50 text-red-600 p-4 rounded-xl border border-red-200">
+                                {error}
+                            </div>
+                        )}
+                        {submitSuccess && (
+                            <div className="mb-4 bg-green-50 text-green-600 p-4 rounded-xl border border-green-200">
+                                Account created successfully!
+                            </div>
+                        )}
                         <button 
                             type="submit"
-                            className="w-full py-4 px-6 border border-transparent rounded-xl text-white bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transform transition-all duration-150 hover:scale-[1.02] text-lg"
+                            disabled={isSubmitting}
+                            className="w-full py-4 px-6 border border-transparent rounded-xl text-white bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transform transition-all duration-150 hover:scale-[1.02] text-lg disabled:opacity-70"
                         >
-                            Create Account
+                            {isSubmitting ? 'Creating Account...' : 'Create Account'}
                         </button>
                     </motion.div>
 

@@ -16,11 +16,27 @@ const navigationIcons = {
 const Navbar = () => {
     const [searchQuery, setSearchQuery] = useState("");
     const [showAccountMenu, setShowAccountMenu] = useState(false);
+    const [userType, setUserType] = useState(null);
     const menuRef = useRef(null);
     const navigate = useNavigate();
     const location = useLocation();
 
-    
+    useEffect(() => {
+        // Get token from localStorage
+        const token = localStorage.getItem('token');
+        if (token) {
+            try {
+                // Decode the JWT token
+
+                const payload = JSON.parse(atob(token.split('.')[1]));
+                setUserType(payload.type); // Assuming 'type' is the field in your JWT
+                console.log("type"+payload.type)
+            } catch (error) {
+                console.error('Error decoding token:', error);
+            }
+        }
+    }, []);
+
     const scrollToSection = (sectionId) => {
         if (location.pathname !== '/') {
             navigate('/');
@@ -64,11 +80,7 @@ const Navbar = () => {
         <nav className="fixed top-0 w-full bg-white z-50 transition-all duration-300 shadow-sm py-4">
             <div className="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
                 <div className="flex items-center space-x-8">
-                    <Link 
-                        to="/" 
-                        onClick={() => scrollToSection('explore-hero')}
-                        className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-purple-600 transition-all duration-300 hover:scale-105"
-                    >
+                    <Link to="/" onClick={() => scrollToSection('explore-hero')} className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-purple-600 transition-all duration-300 hover:scale-105">
                         FUNDIFY
                     </Link>
                     <div className="hidden md:flex space-x-4">
@@ -79,20 +91,24 @@ const Navbar = () => {
                             <i className={navigationIcons.explore + " mr-2"}></i>
                             Explore
                         </button>
-                        <button 
-                            onClick={() => scrollToSection('start-project')}
-                            className="text-gray-600 hover:text-blue-600 whitespace-nowrap !rounded-button transition-all duration-300 hover:scale-105 hover:shadow-md px-4 py-2"
-                        >
-                            <i className={navigationIcons.startProject + " mr-2"}></i>
-                            Start a Project
-                        </button>
-                        <Link 
-                            to="/discover"
-                            className="text-gray-600 hover:text-blue-600 whitespace-nowrap !rounded-button transition-all duration-300 hover:scale-105 hover:shadow-md px-4 py-2"
-                        >
-                            <i className={navigationIcons.discover + " mr-2"}></i>
-                            Discover
-                        </Link>
+                        {userType === 'creator' && (
+                            <button 
+                                onClick={() => scrollToSection('start-project')}
+                                className="text-gray-600 hover:text-blue-600 whitespace-nowrap !rounded-button transition-all duration-300 hover:scale-105 hover:shadow-md px-4 py-2"
+                            >
+                                <i className={navigationIcons.startProject + " mr-2"}></i>
+                                Start a Project
+                            </button>
+                        )}
+                        {userType === 'backer' && (
+                            <Link 
+                                to="/discover"
+                                className="text-gray-600 hover:text-blue-600 whitespace-nowrap !rounded-button transition-all duration-300 hover:scale-105 hover:shadow-md px-4 py-2"
+                            >
+                                <i className={navigationIcons.discover + " mr-2"}></i>
+                                Discover
+                            </Link>
+                        )}
                         <button 
                             onClick={() => scrollToSection('about-section')}
                             className="text-gray-600 hover:text-blue-600 whitespace-nowrap !rounded-button transition-all duration-300 hover:scale-105 hover:shadow-md px-4 py-2"
